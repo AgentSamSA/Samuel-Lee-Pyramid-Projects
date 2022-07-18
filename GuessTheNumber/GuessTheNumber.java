@@ -1,7 +1,18 @@
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
+class InputOutOfBoundsException extends Exception {
+
+}
+
 public class GuessTheNumber {
+
+    static void checkInput(int input) throws InputOutOfBoundsException {
+        if (input < 1 || input > 20) {
+            throw new InputOutOfBoundsException();
+        }
+    }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
@@ -19,17 +30,26 @@ public class GuessTheNumber {
 
             while (tries < 6) {
                 System.out.println("Take a guess.");
-                int guess = scanner.nextInt();
-                tries++;
+                try {
+                    int guess = scanner.nextInt();
+                    checkInput(guess);
+                    tries++;
 
-                if (guess > number) {
-                    System.out.println("Your guess is too high.");
-                } else if (guess < number) {
-                    System.out.println("Your guess is too low");
-                } else {
-                    System.out.println("Good job, " + name + "! You guessed my number in " + tries + " guesses!");
-                    guessed = true;
-                    break;
+                    if (guess > number) {
+                        System.out.println("Your guess is too high.");
+                    } else if (guess < number) {
+                        System.out.println("Your guess is too low");
+                    } else {
+                        System.out.println("Good job, " + name + "! You guessed my number in " + tries + " guesses!");
+                        guessed = true;
+                        break;
+                    }
+                } catch (InputMismatchException ime) {
+                    System.out.println("Exception: Input must be an integer");
+                    System.exit(1);
+                } catch (InputOutOfBoundsException e) {
+                    System.out.println("Exception: Input must be between 1 and 20");
+                    System.exit(1);
                 }
             }
 
